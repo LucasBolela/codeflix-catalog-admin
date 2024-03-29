@@ -8,7 +8,7 @@ from src.core.category.application.use_cases.create_category import (
     CreateCategory,
     CreateCategoryRequest,
     CreateCategoryResponse,
-    InvalidCategoryData,
+    InvalidCategory,
 )
 
 
@@ -32,5 +32,5 @@ class TestCreateCategory:
     def test_create_category_with_invalid_data(self):
         use_case = CreateCategory(repository=MagicMock(CategoryRepository))
 
-        with pytest.raises(InvalidCategoryData, match="name cannot be empty"):
+        with pytest.raises(InvalidCategory, match="name cannot be empty"):
             use_case.execute(CreateCategoryRequest(name=""))

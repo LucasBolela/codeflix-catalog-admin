@@ -9,7 +9,7 @@ from src.core.category.application.use_cases.get_category import (
 )
 from src.core.category.application.use_cases.exceptions import (
     CategoryNotFound,
-    InvalidCategoryData,
+    InvalidCategory,
 )
 from src.core.category.domain.category import Category
 from src.core.category.infra.in_memory_category_repository import (
