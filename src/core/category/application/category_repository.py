@@ -14,5 +14,9 @@ class CategoryRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def delete(self, id: UUID) -> Category | None:
+    def delete(self, id: UUID) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def update(self, category: Category) -> None:
         raise NotImplementedError

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from src.core.category.application.category_repository import CategoryRepository
 from src.core.category.domain.category import Category
-from src.core.category.application.use_cases.exceptions import InvalidCategoryData
+from src.core.category.application.use_cases.exceptions import InvalidCategory
 
 
 @dataclass
@@ -30,7 +30,7 @@ class CreateCategory:
                 is_active=request.is_active,
             )
         except ValueError as err:
-            raise InvalidCategoryData(err)
+            raise InvalidCategory(err)
 
         self.repository.save(category=category)
         return CreateCategoryResponse(id=category.id)
