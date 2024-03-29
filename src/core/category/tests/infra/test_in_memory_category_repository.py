@@ -97,3 +97,25 @@ class TestUpdate:
         repository.update(category)
 
         assert len(repository.categories) == 0
+
+
+class TestList:
+    def test_list_all_categories(self):
+        category_filme = Category(
+            name="Filme",
+            description="Categoria para filmes",
+        )
+        category_serie = Category(
+            name="Série",
+            description="Categoria para séries",
+        )
+        repository = InMemoryCategoryRepository(
+            categories=[
+                category_filme,
+                category_serie,
+            ]
+        )
+
+        repository.list()
+
+        assert len(repository.categories) == 2
