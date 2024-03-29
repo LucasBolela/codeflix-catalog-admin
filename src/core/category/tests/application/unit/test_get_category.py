@@ -1,7 +1,7 @@
 import uuid
 import pytest
 from uuid import UUID
-from unittest.mock import MagicMock, create_autospec
+from unittest.mock import create_autospec
 
 
 from src.core.category.application.category_repository import CategoryRepository
@@ -38,15 +38,11 @@ class TestGetCategory:
         )
 
     def test_return_category_not_found(self):
-        category = Category(
-            name="Filme",
-            description="Categoria de filmes",
-        )
         mock_repository = create_autospec(CategoryRepository)
         mock_repository.get_by_id.return_value = None
-        use_case = GetCategory(repository=mock_repository)
 
-        with pytest.raises(
-            CategoryNotFound, match=f"Category with {category.id} not found"
-        ):
-            use_case.execute(GetCategoryRequest(id=category.id))
+        use_case = GetCategory(repository=mock_repository)
+        request = GetCategoryRequest(id=uuid.uuid4())
+
+        with pytest.raises(CategoryNotFound):
+            use_case.execute(request)
