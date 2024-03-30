@@ -1,22 +1,37 @@
-from rest_framework.test import APITestCase
+import pytest
+from rest_framework.test import APIClient
+from rest_framework import status
 
 from src.core.category.domain.category import Category
 from src.django_project.category_app.repository import DjangoORMCategoryRepository
 
 
-class TestCategoryAPI(APITestCase):
-    def test_list_categories(self):
-        category_movie = Category(name="Movie", description="Movie description")
-        category_documentary = Category(
-            name="Documentary", description="Documentary description"
-        )
+@pytest.mark.django_db
+class TestCategoryAPI:
+    @pytest.fixture
+    def category_movie(self) -> Category:
+        return Category(name="Movie", description="Movie description")
 
-        repository = DjangoORMCategoryRepository()
-        repository.save(category_movie)
-        repository.save(category_documentary)
+    @pytest.fixture
+    def category_documentary(self) -> Category:
+        return Category(name="Documentary", description="Documentary description")
+
+    @pytest.fixture
+    def category_repository(self) -> DjangoORMCategoryRepository:
+        return DjangoORMCategoryRepository()
+
+    def test_list_categories(
+        self,
+        category_movie: Category,
+        category_documentary: Category,
+        category_repository: DjangoORMCategoryRepository,
+    ) -> None:
+
+        category_repository.save(category_movie)
+        category_repository.save(category_documentary)
 
         url = "/api/categories/"
-        response = self.client.get(url)
+        response = APIClient().get(url)
 
         expected_data = [
             {
@@ -32,5 +47,6 @@ class TestCategoryAPI(APITestCase):
                 "is_active": category_documentary.is_active,
             },
         ]
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, expected_data)
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == 2
+        assert response.data == expected_data
